@@ -1,4 +1,5 @@
 import json
+import pathlib
 
 from os import listdir
 
@@ -20,7 +21,7 @@ from dcat.models import (
 class Command(BaseCommand):
     help = "Import data from a DCAT-US file provided by ckanext-datajson."
 
-    def _get_content_file(self, dataset, distribution):
+    def _get_content_file(self, dataset, distribution, datapath="data"):
         """Returns a ContentFile to be added to the django model.
 
         This takes into consideration the following contents in the folder
@@ -31,9 +32,7 @@ class Command(BaseCommand):
             - {distribution_identifier}
               - some-file.csv
         """
-        file_folder = (
-            f'data/{dataset.get("identifier")}/{distribution.get("identifier")}'
-        )
+        file_folder = f'{datapath}/{dataset.get("identifier")}/{distribution.get("identifier")}'
         file = None
         try:
             local_file_name = listdir(file_folder)[0]
@@ -42,16 +41,29 @@ class Command(BaseCommand):
                 open(file_path, mode="rb").read(), name=distribution.get("fileName")
             )
         except IndexError:
-            self.stdout.write(
-                self.style.ERROR(
-                    f'{distribution.get("identifier")} folder does not have a file'
-                )
-            )
+            msg = f'{distribution.get("identifier")} folder does not have a file'
+            self.stdout.write(self.style.ERROR(msg))
         return file
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--file", type=open, help="Path to the data.json file", default="data.json"
+        )
+        parser.add_argument(
+            "--datapath",
+            type=pathlib.Path,
+            help="Path to the data folder",
+            default="data",
+        )
+
     def handle(self, *args, **options):
-        with open("data.json", "r") as file:
-            data = json.load(file)
+        datapath = options.get("datapath")
+        if not datapath.exists():
+            msg = f"{datapath} path to data does not exist."
+            self.stdout.write(self.style.ERROR(msg))
+            return
+
+        data = json.load(options.get("file"))
 
         # Import Catalog
         title = data.get("title")
@@ -64,11 +76,8 @@ class Command(BaseCommand):
             license = LicenceDocument.objects.get(code=data.get("license"))
         except ObjectDoesNotExist:
             license = None
-            self.stdout.write(
-                self.style.WARNING(
-                    "Catalog does not have a license. Setting it to None."
-                )
-            )
+            msg = f"Catalog does not have a license. Setting it to None."
+            self.stdout.write(self.style.WARNING(msg))
 
         catalog = Catalog.objects.create(
             title=title, description=description, publisher=publisher, license=license
@@ -103,11 +112,10 @@ class Command(BaseCommand):
                 try:
                     dataset_theme = DataTheme.objects.get(code=theme)
                 except ObjectDoesNotExist:
-                    self.stdout.write(
-                        self.style.WARNING(
-                            f'Theme of {dataset.get("identifier")} does not existed a theme'
-                        )
+                    msg = (
+                        f"Theme of {dataset.get('identifier')} does not existed a theme"
                     )
+                    self.stdout.write(self.style.WARNING(msg))
                 dataset_created.themes.add(dataset_theme)
 
             # Import Distributions
@@ -118,7 +126,7 @@ class Command(BaseCommand):
                 distribution_info["title"] = distribution.get("title")
                 distribution_info["description"] = distribution.get("description", "")
                 distribution_info["file"] = self._get_content_file(
-                    dataset, distribution
+                    dataset, distribution, datapath=options.get("datapath")
                 )
                 file_name = distribution.get("fileName")
                 if not file_name:
@@ -130,11 +138,8 @@ class Command(BaseCommand):
                             "downloadURL"
                         )
                     else:
-                        self.stdout.write(
-                            self.style.ERROR(
-                                f'{distribution.get("identifier")} does not have a file name or a download url'
-                            )
-                        )
+                        msg = f'{distribution.get("identifier")} does not have a file name or a download url'
+                        self.stdout.write(self.style.ERROR(msg))
 
                 _format = distribution.get("format")
                 if _format:
