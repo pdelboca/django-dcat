@@ -6,14 +6,14 @@ some command line tools to import data to it from different vocabularies.
 
 ## Quick start
 
-1. Add "dcat" to your INSTALLED_APPS setting like this::
-
+1. Add `dcat` to your `INSTALLED_APPS` setting like this:
+```
     INSTALLED_APPS = [
         ...,
         "dcat",
     ]
-
-2. Run ``python manage.py migrate`` to create the DCAT models.
+```
+2. Run ``python manage.py migrate`` to create the DCAT models in your database.
 
 3. Start the development server and visit http://127.0.0.1:8000/admin/
    to start adding data (you'll need the Admin app enabled).
