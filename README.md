@@ -22,7 +22,7 @@ some command line tools to import data to it from different vocabularies.
 
 ## CLI utilities
 
-#### Migrating from CKAN
+### Migrating from CKAN
 
 `django-dcat` provides two command lines that allows to:
  1) Make a dump of data from a CKAN data portal (that has [ckanext-datajson](https://github.com/GSA/ckanext-datajson) installed)
@@ -39,7 +39,7 @@ some command line tools to import data to it from different vocabularies.
  $ python manage.py import_from_datajson
  ```
 
-#### Controlled vocabularies for standardise metadata
+### Controlled vocabularies for standardise metadata
 
 Commands to import controlled vocabularies used in the EU Open Data Portal in order to standardise the metadata.
 
