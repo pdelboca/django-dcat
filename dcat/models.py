@@ -152,13 +152,13 @@ class Distribution(models.Model):
 class MediaType(models.Model):
     """A set of media types from the DCAT-AP vocabulary."""
 
-    code = models.CharField(max_length=10)
     extension = models.CharField(max_length=10)
-    media_type = models.CharField(max_length=50)
-    description = models.TextField()
+    code = models.CharField(max_length=10, unique=True, blank=True, null=True)
+    media_type = models.CharField(max_length=50, blank=True)
+    description = models.TextField(blank=True)
 
     def __str__(self):
-        return self.code
+        return self.extension
 
 
 class LicenceDocument(models.Model):
@@ -169,8 +169,8 @@ class LicenceDocument(models.Model):
     def type(self):
         return self.url_general or self.label
 
-    code = models.CharField(max_length=10, unique=True)
     label = models.CharField(max_length=255)
+    code = models.CharField(max_length=10, unique=True, blank=True, null=True)
     url_general = models.URLField(null=True)
     url_document = models.URLField(null=True)
 

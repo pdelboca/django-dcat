@@ -138,29 +138,13 @@ class Command(BaseCommand):
 
                 _format = distribution.get("format")
                 if _format:
-                    try:
-                        distribution_info["format"] = MediaType.objects.get(
-                            code=_format
-                        )
-                    except ObjectDoesNotExist:
-                        self.stdout.write(
-                            self.style.WARNING(
-                                f'{distribution.get("fileName")}. Could not match {_format} with a MediaType'
-                            )
-                        )
+                    format, _ = MediaType.objects.get_or_create(extension=_format)
+                    distribution_info["format"] = format
 
                 _license = distribution.get("license")
                 if _license:
-                    try:
-                        distribution_info["license"] = LicenceDocument.objects.get(
-                            code=_license
-                        )
-                    except ObjectDoesNotExist:
-                        self.stdout.write(
-                            self.style.WARNING(
-                                f'{distribution.get("fileName")}. Could not match {_license} with a LicenceDocument'
-                            )
-                        )
+                    license, _ = LicenceDocument.objects.get_or_create(label=_license)
+                    distribution_info["license"] = license
 
                 Distribution.objects.create(**distribution_info)
 
