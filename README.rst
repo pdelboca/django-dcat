@@ -33,7 +33,7 @@ CLI utilities
 Migrating from CKAN
 *******************
 
-``django-dcat`` provides two command lines that allows to:
+``django-dcat`` provides two commands that allows to:
  1) Make a dump of data from a CKAN data portal (that has `ckanext-datajson <https://github.com/GSA/ckanext-datajson>`_ installed)
  2) Create a Catalog with its related entities (datasets, distributions, etc)
 
@@ -66,6 +66,37 @@ Commands to import controlled vocabularies used in the EU Open Data Portal in or
 The goal of these commands is to provide data publishers with pre-filled options for the metadata fields. This will improve
 data quality and avoid common problems like duplicated metadata values for typos or inconsistent data entry (like distributions with
 `.csv`, `.CSV`, `CSV`, etc)
+
+
+Extending the model
+###################
+
+``django-dcat`` focuses on providing a model layer for DCAT metadata. However, f you require custom fields in your application,
+you can extend any model using a OneToOneField pattern (similar to what you use to extend Django's User model).
+
+.. code:: python
+
+    from django.db import models
+    from dcat.models import Distribution
+
+
+    class DistributionExtras(Distribution):
+        distribution = models.OneToOneField(Distribution, on_delete=models.CASCADE, related_name='extras')
+        my_extra_field = models.CharField(max_length=255, blank=True, null=True)
+
+And then you can call this fields from your code using the related name attribute:
+
+.. code:: python
+
+    from dcat.models import Distribution
+
+    distribution = Distribution.objects.get(pk=1)
+    print(distribution.extras.my_extra_field)
+
+
+Note: Instead of calling it ``extras`` You can play with more semantic names for the related_name
+attribute like the name of your app.
+
 
 Implementation notes
 ####################
