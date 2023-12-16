@@ -7,6 +7,7 @@ Initial Mandatory/Recommended/Optional properties are based on the DCAT-AP
 specification: https://semiceu.github.io/DCAT-AP/releases/3.0.0/
 
 """
+import hashlib
 
 from django.db import models
 
@@ -120,6 +121,9 @@ class Distribution(models.Model):
     license = models.ForeignKey("LicenceDocument", on_delete=models.SET_NULL, null=True)
     external_download_url = models.URLField(blank=True, null=True)
 
+    # Optional properties
+    checksum = models.OneToOneField("Checksum", on_delete=models.SET_NULL, null=True)
+
     @property
     def download_url(self):
         """Return the download url of the file.
@@ -131,6 +135,14 @@ class Distribution(models.Model):
         if self.external_download_url:
             return self.external_download_url
         return self.file.url
+
+    def calculate_md5_checksum(self):
+        """Calculates the md5 checksum of the file."""
+        md5_hash = hashlib.md5()
+        with self.file.open(mode="rb") as f:
+            while chunk := f.read(4096):
+                md5_hash.update(chunk)
+        return md5_hash.hexdigest()
 
     def __str__(self):
         return self.title
@@ -194,3 +206,13 @@ class DataTheme(models.Model):
 
     def __str__(self):
         return self.label
+
+
+class Checksum(models.Model):
+    """A value that allows the contents of a file to be authenticated."""
+
+    checksum_value = models.CharField(max_length=255)
+    algorithm = models.CharField(max_length=10)
+
+    def __str__(self):
+        return f"{self.checksum_value} ({self.algorithm})"
