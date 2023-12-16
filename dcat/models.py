@@ -122,7 +122,7 @@ class Distribution(models.Model):
     external_download_url = models.URLField(blank=True, null=True)
 
     # Optional properties
-    checksum = models.ForeignKey("Checksum", on_delete=models.SET_NULL, null=True)
+    checksum = models.OneToOneField("Checksum", on_delete=models.SET_NULL, null=True)
 
     @property
     def download_url(self):
