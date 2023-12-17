@@ -24,15 +24,15 @@ class Command(BaseCommand):
     def _get_content_file(self, dataset, distribution, datapath="data"):
         """Returns a ContentFile to be added to the django model.
 
-        This takes into consideration the following contents in the folder
-        where the command is executed:
-        - data.json
-        - data/
-          - {dataset_identifier}
-            - {distribution_identifier}
+        Requires the following structure:
+        - datapath/
+          - {dataset_identifier}/
+            - {distribution_identifier}/
               - some-file.csv
         """
-        file_folder = f'{datapath}/{dataset.get("identifier")}/{distribution.get("identifier")}'
+        file_folder = (
+            f'{datapath}/{dataset.get("identifier")}/{distribution.get("identifier")}'
+        )
         file = None
         try:
             local_file_name = listdir(file_folder)[0]
@@ -63,24 +63,23 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(msg))
             return
 
-        data = json.load(options.get("file"))
+        with options.get("file") as file:
+            data = json.load(file)
 
-        # Import Catalog
         title = data.get("title")
         description = data.get("description")
         publisher, _ = Agent.objects.get_or_create(
             name=data.get("publisher").get("name"),
             mbox=data.get("publisher").get("mbox", ""),
         )
-        try:
-            license = LicenceDocument.objects.get(code=data.get("license"))
-        except ObjectDoesNotExist:
-            license = None
-            msg = f"Catalog does not have a license. Setting it to None."
-            self.stdout.write(self.style.WARNING(msg))
-
+        catalog_license, _ = LicenceDocument.objects.get_or_create(
+            label=data.get("license")
+        )
         catalog = Catalog.objects.create(
-            title=title, description=description, publisher=publisher, license=license
+            title=title,
+            description=description,
+            publisher=publisher,
+            license=catalog_license,
         )
 
         for theme in data.get("themeTaxonomy", []):
