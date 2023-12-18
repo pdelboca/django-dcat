@@ -72,14 +72,14 @@ class Command(BaseCommand):
             name=data.get("publisher").get("name"),
             mbox=data.get("publisher").get("mbox", ""),
         )
-        catalog_license, _ = LicenceDocument.objects.get_or_create(
+        catalog_licence, _ = LicenceDocument.objects.get_or_create(
             label=data.get("license")
         )
         catalog = Catalog.objects.create(
             title=title,
             description=description,
             publisher=publisher,
-            license=catalog_license,
+            licence=catalog_licence,
         )
 
         for theme in data.get("themeTaxonomy", []):
@@ -145,10 +145,10 @@ class Command(BaseCommand):
                     format, _ = MediaType.objects.get_or_create(extension=_format)
                     distribution_info["format"] = format
 
-                _license = distribution.get("license")
-                if _license:
-                    license, _ = LicenceDocument.objects.get_or_create(label=_license)
-                    distribution_info["license"] = license
+                _licence = distribution.get("license")
+                if _licence:
+                    licence, _ = LicenceDocument.objects.get_or_create(label=_licence)
+                    distribution_info["licence"] = licence
 
                 Distribution.objects.create(**distribution_info)
 

@@ -38,7 +38,7 @@ class Catalog(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     publisher = models.ForeignKey("Agent", on_delete=models.CASCADE)
-    license = models.ForeignKey("LicenceDocument", on_delete=models.SET_NULL, null=True)
+    licence = models.ForeignKey("LicenceDocument", on_delete=models.SET_NULL, null=True)
 
     # Recommended properties
     themes = models.ManyToManyField("DataTheme")
@@ -112,7 +112,7 @@ class Distribution(models.Model):
     file = models.FileField(upload_to=_get_storage_path)
     dataset = models.ForeignKey("Dataset", on_delete=models.CASCADE)
     format = models.ForeignKey("MediaType", on_delete=models.SET_NULL, blank=True, null=True)
-    license = models.ForeignKey("LicenceDocument", on_delete=models.SET_NULL, blank=True, null=True)
+    licence = models.ForeignKey("LicenceDocument", on_delete=models.SET_NULL, blank=True, null=True)
     external_download_url = models.URLField(blank=True, default="")
 
     # Optional properties
