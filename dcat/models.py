@@ -12,12 +12,6 @@ import hashlib
 from django.db import models
 
 
-class Resource(models.Model):
-    """Anything described by RDF."""
-
-    pass
-
-
 class Agent(models.Model):
     """Any entity carrying out actions with respect to the (Core) entities.
 
@@ -66,7 +60,7 @@ class Catalog(models.Model):
 #     pass
 
 
-class Dataset(Resource):
+class Dataset(models.Model):
     """A conceptual entity that represents the information published."""
 
     # Mandatory properties
@@ -82,12 +76,12 @@ class Dataset(Resource):
         return self.title
 
 
-# class DatasetInSeries(Resource):
+# class DatasetInSeries(models.Model):
 #     """Capture the case when a Dataset is a member of a Dataset Series."""
 #     pass
 
 
-# class DatasetSeries(Resource):
+# class DatasetSeries(models.Model):
 #     """Datasets that are published separately, but share some characteristics."""
 #     pass
 
@@ -117,12 +111,12 @@ class Distribution(models.Model):
     description = models.TextField(blank=True)
     file = models.FileField(upload_to=_get_storage_path)
     dataset = models.ForeignKey("Dataset", on_delete=models.CASCADE)
-    format = models.ForeignKey("MediaType", on_delete=models.SET_NULL, null=True)
-    license = models.ForeignKey("LicenceDocument", on_delete=models.SET_NULL, null=True)
-    external_download_url = models.URLField(blank=True, null=True)
+    format = models.ForeignKey("MediaType", on_delete=models.SET_NULL, blank=True, null=True)
+    license = models.ForeignKey("LicenceDocument", on_delete=models.SET_NULL, blank=True, null=True)
+    external_download_url = models.URLField(blank=True, default="")
 
     # Optional properties
-    checksum = models.OneToOneField("Checksum", on_delete=models.SET_NULL, null=True)
+    checksum = models.OneToOneField("Checksum", on_delete=models.SET_NULL, blank=True, null=True)
 
     @property
     def download_url(self):
@@ -148,7 +142,7 @@ class Distribution(models.Model):
         return self.title
 
 
-# class DataService(Resource):
+# class DataService(models.Model):
 #     """Operations that provides access to datasets or data processing functions.
 
 #     Example: APIs, Web Services, SPARQL endpoints, etc.
@@ -183,8 +177,8 @@ class LicenceDocument(models.Model):
 
     label = models.CharField(max_length=255)
     code = models.CharField(max_length=10, unique=True, blank=True, null=True)
-    url_general = models.URLField(null=True)
-    url_document = models.URLField(null=True)
+    url_general = models.URLField(blank=True, default="")
+    url_document = models.URLField(blank=True, default="")
 
     def __str__(self):
         return self.label
@@ -202,7 +196,7 @@ class DataTheme(models.Model):
 
     code = models.CharField(max_length=10)
     label = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, default="")
 
     def __str__(self):
         return self.label
