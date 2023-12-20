@@ -42,6 +42,7 @@ class Catalog(models.Model):
 
     # Recommended properties
     themes = models.ManyToManyField("DataTheme")
+    homepage = models.URLField(blank=True)
 
     def __str__(self):
         return self.title
