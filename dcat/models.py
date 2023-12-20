@@ -41,7 +41,7 @@ class Catalog(models.Model):
     licence = models.ForeignKey("LicenceDocument", on_delete=models.SET_NULL, null=True)
 
     # Recommended properties
-    themes = models.ManyToManyField("DataTheme")
+    themes = models.ManyToManyField("DataTheme", blank=True)
     homepage = models.URLField(blank=True)
 
     def __str__(self):
@@ -69,9 +69,9 @@ class Dataset(models.Model):
     catalog = models.ForeignKey("Catalog", on_delete=models.CASCADE)
 
     # Recommended properties
-    description = models.TextField()
+    description = models.TextField(blank=True)
     publisher = models.ForeignKey("Agent", on_delete=models.SET_NULL, null=True)
-    themes = models.ManyToManyField("DataTheme")
+    themes = models.ManyToManyField("DataTheme", blank=True)
 
     def __str__(self):
         return self.title
