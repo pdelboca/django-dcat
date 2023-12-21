@@ -154,12 +154,21 @@ class Distribution(models.Model):
         return self.title
 
 
-# class DataService(models.Model):
-#     """Operations that provides access to datasets or data processing functions.
+class DataService(models.Model):
+    """Operations that provides access to datasets or data processing functions.
 
-#     Example: APIs, Web Services, SPARQL endpoints, etc.
-#     """
-#     pass
+    Example: APIs, Web Services, SPARQL endpoints, etc.
+    """
+
+    # Mandatory properties
+    title = models.CharField(max_length=255)
+    endpoint_url = models.URLField()
+    catalog = models.ForeignKey("Catalog", on_delete=models.CASCADE)
+
+    # Optional properties
+    description = models.TextField(blank=True)
+    format = models.ManyToManyField("MediaType", blank=True)
+    licence = models.ForeignKey("LicenceDocument", on_delete=models.SET_NULL, null=True)
 
 
 class MediaType(models.Model):
