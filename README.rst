@@ -6,10 +6,8 @@ django-dcat
 django-dcat is a Django app that provides a model layer for `DCAT 3.0 <https://www.w3.org/TR/vocab-dcat-3/>`_
 metadata and some command line tools to import data to it, to create vocabularies and more.
 
-.. warning::
-
-    This is a work in progress and it is not stable for production. Feel free to drop a comment in discussions
-    if you have any questions or suggestions.
+**Note:** This is a work in progress and it is not stable for production. If you wanna see an example of what can
+be done checkout `Catalogo Social <https://catalogosocial.fly.dev/>`_, a data catalog implemented with django-dcat.
 
 Quick start
 ###########
@@ -38,9 +36,10 @@ CLI utilities
 Migrating from CKAN
 *******************
 
-``django-dcat`` provides two commands that allows to:
- 1) Make a dump of data from a CKAN data portal (that has `ckanext-datajson <https://github.com/GSA/ckanext-datajson>`_ installed)
- 2) Create a Catalog with its related entities (datasets, distributions, etc)
+There are two commands that allows you to:
+
+1) Make a dump of data from a CKAN data portal (that has `ckanext-datajson <https://github.com/GSA/ckanext-datajson>`_ installed)
+2) Create a Catalog with its related entities (datasets, distributions, etc)
 
 .. code:: bash
 
@@ -57,7 +56,7 @@ Migrating from CKAN
 Controlled vocabularies for standardise metadata
 ************************************************
 
-Commands to import controlled vocabularies used in the EU Open Data Portal in order to standardise the metadata.
+There are two commands to import controlled vocabularies used in the EU Open Data Portal in order to standardise the metadata.
 
 .. code:: bash
 
@@ -70,13 +69,13 @@ Commands to import controlled vocabularies used in the EU Open Data Portal in or
 
 The goal of these commands is to provide data publishers with pre-filled options for the metadata fields. This will improve
 data quality and avoid common problems like duplicated metadata values for typos or inconsistent data entry (like distributions with
-`.csv`, `.CSV`, `CSV`, etc)
+.csv, .CSV, CSV, etc)
 
 
 Extending the model
 ###################
 
-``django-dcat`` focuses on providing a model layer for DCAT metadata. However, f you require custom fields in your application,
+``django-dcat`` focuses on providing a model layer for DCAT metadata. However, if you require custom fields in your application,
 you can extend any model using a OneToOneField pattern (similar to what you use to extend Django's User model).
 
 .. code:: python
