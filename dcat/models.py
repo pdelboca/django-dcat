@@ -74,6 +74,10 @@ class Dataset(models.Model):
     themes = models.ManyToManyField("DataTheme", blank=True)
     keywords = models.ManyToManyField("Keyword", blank=True)
 
+    # Optional properties
+    modified = models.DateField(blank=True, null=True)
+    issued = models.DateField(blank=True, null=True)
+
     def __str__(self):
         return self.title
 
@@ -155,11 +159,6 @@ class Distribution(models.Model):
 
 #     Example: APIs, Web Services, SPARQL endpoints, etc.
 #     """
-#     pass
-
-
-# class Checksum(models.Model):
-#     """A value that allows the contents of a file to be authenticated."""
 #     pass
 
 
