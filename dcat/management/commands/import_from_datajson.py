@@ -6,6 +6,7 @@ from os import listdir
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
+from django.utils.text import slugify
 
 from dcat.models import (
     Catalog,
@@ -15,6 +16,7 @@ from dcat.models import (
     MediaType,
     LicenceDocument,
     DataTheme,
+    Keyword,
 )
 
 
@@ -116,6 +118,12 @@ class Command(BaseCommand):
                     )
                     self.stdout.write(self.style.WARNING(msg))
                 dataset_created.themes.add(dataset_theme)
+
+            for keyword in dataset.get("keyword", []):
+                dataset_keyword, _ = Keyword.objects.get_or_create(
+                    name=keyword, slug=slugify(keyword)
+                    )
+                dataset_created.keywords.add(dataset_keyword)
 
             # Import Distributions
             distributions = dataset.get("distribution", [])
