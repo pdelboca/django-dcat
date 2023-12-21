@@ -72,6 +72,7 @@ class Dataset(models.Model):
     description = models.TextField(blank=True)
     publisher = models.ForeignKey("Agent", on_delete=models.SET_NULL, null=True)
     themes = models.ManyToManyField("DataTheme", blank=True)
+    keywords = models.ManyToManyField("Keyword", blank=True)
 
     def __str__(self):
         return self.title
@@ -211,3 +212,12 @@ class Checksum(models.Model):
 
     def __str__(self):
         return f"{self.checksum_value} ({self.algorithm})"
+
+
+class Keyword(models.Model):
+    """A keyword or tag describing the Dataset."""
+    name = models.CharField(max_length=50)
+    slug = models.SlugField()
+
+    def __str__(self):
+        return self.name
