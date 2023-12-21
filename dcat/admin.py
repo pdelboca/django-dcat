@@ -10,26 +10,28 @@ from dcat.models import (
     MediaType,
     LicenceDocument,
     DataTheme,
-    Keyword
+    Keyword,
 )
-
-admin.site.register(Catalog)
 
 
 class DatasetAdmin(admin.ModelAdmin):
     search_fields = ("title",)
 
 
-admin.site.register(Dataset, DatasetAdmin)
-
-
 class DistributionAdmin(admin.ModelAdmin):
     search_fields = ("title",)
+
 
 class KeywordAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ["name"]}
 
 
+class DataThemeAdmin(admin.ModelAdmin):
+    search_fields = ("label",)
+
+
+admin.site.register(Catalog)
+admin.site.register(Dataset, DatasetAdmin)
 admin.site.register(Distribution, DistributionAdmin)
 admin.site.register(Agent)
 admin.site.register(MediaType)
