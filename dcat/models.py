@@ -77,6 +77,7 @@ class Dataset(models.Model):
     # Optional properties
     modified = models.DateField(blank=True, null=True)
     issued = models.DateField(blank=True, null=True)
+    landing_page = models.URLField(blank=True)
 
     def __str__(self):
         return self.title
