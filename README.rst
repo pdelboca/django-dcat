@@ -112,3 +112,14 @@ See the diagram: `UML diagram illustrating the DCAT-AP specification <https://se
 For more information on DCAT:
  - `Data Catalog Vocabulary (DCAT) - Version 3.0 <https://www.w3.org/TR/vocab-dcat-3/>`_
  - `DCAT-AP profile <https://semiceu.github.io/DCAT-AP/releases/3.0.0/>`_
+
+
+Publishing a new Version
+########################
+
+The project uses twine to publish to PyPi:
+
+ - Update the version in ``setup.cfg``
+ - Create a new release in Github.
+ - Build the package: ``python -m build``
+ - Upload to PyPi ``twine upload dist/*``
