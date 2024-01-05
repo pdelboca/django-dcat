@@ -109,22 +109,30 @@ class Distribution(models.Model):
         return f"files/datasets/{instance.dataset.pk}/{filename}"
 
     # Mandatory properties
+    dataset = models.ForeignKey("Dataset", on_delete=models.CASCADE)
     @property
     def access_url(self):
+        """Return the access url of the file.
+
+        If the file is hosted in another portal, the access_url is provided
+        in the distribution. Otherwise, the access_url is the URL to the
+        distribution.
+        """
         pass
 
     # Recomened properties
     title = models.CharField(max_length=255, blank=True)
     description = models.TextField(blank=True)
-    file = models.FileField(upload_to=_get_storage_path)
-    dataset = models.ForeignKey("Dataset", on_delete=models.CASCADE)
+    file = models.FileField(upload_to=_get_storage_path, blank=True)
     format = models.ForeignKey(
         "MediaType", on_delete=models.SET_NULL, blank=True, null=True
     )
     licence = models.ForeignKey(
         "LicenceDocument", on_delete=models.SET_NULL, blank=True, null=True
     )
+
     external_download_url = models.URLField(blank=True, default="")
+    external_access_url = models.URLField(blank=True, default="")
 
     # Optional properties
     checksum = models.OneToOneField(
