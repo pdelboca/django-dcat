@@ -22,7 +22,7 @@ class Agent(models.Model):
     name = models.CharField(max_length=255)
 
     # Recommended properties
-    type = models.CharField(max_length=20)
+    type = models.CharField(max_length=20, blank=True)
 
     # Optional properties
     mbox = models.EmailField(blank=True, null=True)
