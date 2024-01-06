@@ -38,9 +38,9 @@ class Catalog(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     publisher = models.ForeignKey("Agent", on_delete=models.CASCADE)
-    licence = models.ForeignKey("LicenceDocument", on_delete=models.SET_NULL, null=True)
 
     # Recommended properties
+    licence = models.ForeignKey("LicenceDocument", on_delete=models.SET_NULL, blank=True, null=True)
     themes = models.ManyToManyField("DataTheme", blank=True)
     homepage = models.URLField(blank=True)
 
