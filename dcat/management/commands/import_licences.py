@@ -64,9 +64,7 @@ class Command(BaseCommand):
                 )
             else:
                 self.stdout.write(
-                    self.style.WARNING(
-                        f"{licence.code} already exists in the database."
-                    )
+                    self.style.WARNING(f"{licence.code} already exists in the database.")
                 )
 
         total_licences = LicenceDocument.objects.count()

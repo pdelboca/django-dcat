@@ -113,16 +113,14 @@ class Command(BaseCommand):
                 try:
                     dataset_theme = DataTheme.objects.get(code=theme)
                 except ObjectDoesNotExist:
-                    msg = (
-                        f"Theme of {dataset.get('identifier')} does not existed a theme"
-                    )
+                    msg = f"Theme of {dataset.get('identifier')} does not existed a theme"
                     self.stdout.write(self.style.WARNING(msg))
                 dataset_created.themes.add(dataset_theme)
 
             for keyword in dataset.get("keyword", []):
                 dataset_keyword, _ = Keyword.objects.get_or_create(
                     name=keyword, slug=slugify(keyword)
-                    )
+                )
                 dataset_created.keywords.add(dataset_keyword)
 
             # Import Distributions
