@@ -216,10 +216,15 @@ class Distribution(models.Model):
         If the file is hosted in another portal, the download_url is provided
         in the distribution. Otherwise, the download_url is generated from the
         file field.
+
+        This field is not mandatory so it can return an empty string (a distrubution
+        can contain only an access_url.)
         """
         if self.external_download_url:
             return self.external_download_url
-        return self.file.url
+        if self.file:
+            return self.file.url
+        return ""
 
     def calculate_md5_checksum(self):
         """Calculates the md5 checksum of the file."""
