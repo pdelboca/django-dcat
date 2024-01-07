@@ -6,6 +6,9 @@ https://www.w3.org/TR/vocab-dcat-3/
 Initial Mandatory/Recommended/Optional properties are based on the DCAT-AP
 specification: https://semiceu.github.io/DCAT-AP/releases/3.0.0/
 
+For the help_text we are copying the description of the properties from
+the DCAT-AP specification.
+
 """
 import hashlib
 
@@ -19,13 +22,19 @@ class Agent(models.Model):
     """
 
     # Mandatory properties
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, help_text="A name of the Agent.")
 
     # Recommended properties
-    type = models.CharField(max_length=20, blank=True)
+    type = models.CharField(
+        max_length=20,
+        blank=True,
+        help_text="A type of the agent that makes the Catalogue or Dataset available.",
+    )
 
     # Optional properties
-    mbox = models.EmailField(blank=True, null=True)
+    mbox = models.EmailField(
+        blank=True, null=True, help_text="An email address of the Agent."
+    )
 
     def __str__(self):
         return self.name
@@ -35,14 +44,30 @@ class Catalog(models.Model):
     """A catalogue that hosts the Datasets or Data Services being described."""
 
     # Mandatory properties
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    publisher = models.ForeignKey("Agent", on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, help_text="A name given to the Catalogue.")
+    description = models.TextField(help_text="A free-text account of the Catalogue.")
+    publisher = models.ForeignKey(
+        "Agent",
+        on_delete=models.CASCADE,
+        help_text="An entity (organisation) responsible for making the Catalogue available.",
+    )
 
     # Recommended properties
-    licence = models.ForeignKey("LicenceDocument", on_delete=models.SET_NULL, blank=True, null=True)
-    themes = models.ManyToManyField("DataTheme", blank=True)
-    homepage = models.URLField(blank=True)
+    licence = models.ForeignKey(
+        "LicenceDocument",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        help_text="A licence under which the Catalogue can be used or reused.",
+    )
+    themes = models.ManyToManyField(
+        "DataTheme",
+        blank=True,
+        help_text="A knowledge organization system used to classify the Catalogue's Datasets.",
+    )
+    homepage = models.URLField(
+        blank=True, help_text="A web page that acts as the main page for the Catalogue."
+    )
 
     def __str__(self):
         return self.title
@@ -65,19 +90,39 @@ class Dataset(models.Model):
     """A conceptual entity that represents the information published."""
 
     # Mandatory properties
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, help_text="A name given to the Dataset.")
     catalog = models.ForeignKey("Catalog", on_delete=models.CASCADE)
 
     # Recommended properties
-    description = models.TextField(blank=True)
-    publisher = models.ForeignKey("Agent", on_delete=models.SET_NULL, null=True)
-    themes = models.ManyToManyField("DataTheme", blank=True)
-    keywords = models.ManyToManyField("Keyword", blank=True)
+    description = models.TextField(
+        blank=True, help_text="A free-text account of the Dataset."
+    )
+    publisher = models.ForeignKey(
+        "Agent",
+        on_delete=models.SET_NULL,
+        null=True,
+        help_text="An entity (organisation) responsible for making the Dataset available.",
+    )
+    themes = models.ManyToManyField(
+        "DataTheme",
+        blank=True,
+        help_text="A category of the Dataset. A Dataset may be associated with multiple themes.",
+    )
+    keywords = models.ManyToManyField(
+        "Keyword", blank=True, help_text="A keyword or tag describing the Dataset."
+    )
 
     # Optional properties
-    modified = models.DateField(blank=True, null=True)
+    modified = models.DateField(
+        blank=True,
+        null=True,
+        help_text="The most recent date on which the Dataset was changed or modified.",
+    )
     issued = models.DateField(blank=True, null=True)
-    landing_page = models.URLField(blank=True)
+    landing_page = models.URLField(
+        blank=True,
+        help_text="A web page that provides access to the Dataset, its Distributions and/or additional information. It is intended to point to a landing page at the original data provider, not to a page on a site of a third party, such as an aggregator.",
+    )
 
     def __str__(self):
         return self.title
@@ -110,6 +155,7 @@ class Distribution(models.Model):
 
     # Mandatory properties
     dataset = models.ForeignKey("Dataset", on_delete=models.CASCADE)
+
     @property
     def access_url(self):
         """Return the access url of the file.
@@ -121,22 +167,46 @@ class Distribution(models.Model):
         pass
 
     # Recomened properties
-    title = models.CharField(max_length=255, blank=True)
-    description = models.TextField(blank=True)
+    title = models.CharField(
+        max_length=255, blank=True, help_text="A name given to the Distribution."
+    )
+    description = models.TextField(
+        blank=True, help_text="A free-text account of the Distribution."
+    )
     file = models.FileField(upload_to=_get_storage_path, blank=True)
     format = models.ForeignKey(
-        "MediaType", on_delete=models.SET_NULL, blank=True, null=True
+        "MediaType",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        help_text="The file format of the Distribution.",
     )
     licence = models.ForeignKey(
-        "LicenceDocument", on_delete=models.SET_NULL, blank=True, null=True
+        "LicenceDocument",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        help_text="A licence under which the Distribution is made available. ",
     )
 
-    external_download_url = models.URLField(blank=True, default="")
-    external_access_url = models.URLField(blank=True, default="")
+    external_download_url = models.URLField(
+        blank=True,
+        default="",
+        help_text="A URL that is a direct link to a downloadable file in a given format.",
+    )
+    external_access_url = models.URLField(
+        blank=True,
+        default="",
+        help_text="A URL that gives access to a Distribution of the Dataset. The resource at the access URL may contain information about how to get the Dataset.",
+    )
 
     # Optional properties
     checksum = models.OneToOneField(
-        "Checksum", on_delete=models.SET_NULL, blank=True, null=True
+        "Checksum",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        help_text="A mechanism that can be used to verify that the contents of a distribution have not changed. The checksum is related to the download_url.",
     )
 
     @property
@@ -170,14 +240,27 @@ class DataService(models.Model):
     """
 
     # Mandatory properties
-    title = models.CharField(max_length=255)
-    endpoint_url = models.URLField()
+    title = models.CharField(max_length=255, help_text="A name given to the DataService.")
+    endpoint_url = models.URLField(
+        help_text="The root location or primary endpoint of the service (an IRI)."
+    )
     catalog = models.ForeignKey("Catalog", on_delete=models.CASCADE)
 
     # Optional properties
-    description = models.TextField(blank=True)
-    format = models.ManyToManyField("MediaType", blank=True)
-    licence = models.ForeignKey("LicenceDocument", on_delete=models.SET_NULL, null=True)
+    description = models.TextField(
+        blank=True, help_text="A free-text account of the DataService."
+    )
+    format = models.ManyToManyField(
+        "MediaType",
+        blank=True,
+        help_text="The structure that can be returned by querying the endpointURL.",
+    )
+    licence = models.ForeignKey(
+        "LicenceDocument",
+        on_delete=models.SET_NULL,
+        null=True,
+        help_text="A licence under which the Data service is made available.",
+    )
 
 
 class MediaType(models.Model):
