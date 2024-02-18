@@ -6,8 +6,8 @@ django-dcat
 django-dcat is a Django app that provides a model layer for `DCAT 3.0 <https://www.w3.org/TR/vocab-dcat-3/>`_
 metadata and some command line tools to import data to it, to create vocabularies and more.
 
-**Note:** This is a work in progress and it is not stable for production. If you wanna see an example of what can
-be done checkout `Catalogo Social <https://catalogosocial.fly.dev/>`_, a data catalog implemented with django-dcat.
+If you wanna see an example of what can be done checkout `Catalogo Social <https://catalogosocial.fly.dev/>`_, a
+data catalog implemented with django-dcat.
 
 Quick start
 ###########
