@@ -1,8 +1,6 @@
 from django.test import TestCase
 from dcat.models import Agent, Catalog, Dataset
 
-# Create your tests here.
-
 
 class DCATSerializationJSONLDTestCase(TestCase):
 

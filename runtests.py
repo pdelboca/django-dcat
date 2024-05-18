@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+# More info:
+# https://docs.djangoproject.com/en/5.0/topics/testing/advanced/#using-the-django-test-runner-to-test-reusable-applications
+
 import os
 import sys
 
