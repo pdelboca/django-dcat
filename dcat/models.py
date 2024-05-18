@@ -85,6 +85,9 @@ class Catalog(models.Model):
         result['dct:publisher'] = self.publisher.to_dcat()
         if self.homepage:
             result['foaf:homepage'] = {'@type': 'foaf:Document', 'foaf:Document': self.homepage}
+
+        result['dcat:dataset'] = [dataset.to_dcat() for dataset in self.dataset_set.all()]
+
         return result
 
     def __str__(self):
@@ -112,6 +115,7 @@ class Dataset(models.Model):
     catalog = models.ForeignKey("Catalog", on_delete=models.CASCADE)
 
     # Recommended properties
+    # TODO: description is mandatory
     description = models.TextField(
         blank=True, help_text="A free-text account of the Dataset."
     )
@@ -141,6 +145,13 @@ class Dataset(models.Model):
         blank=True,
         help_text="A web page that provides access to the Dataset, its Distributions and/or additional information. It is intended to point to a landing page at the original data provider, not to a page on a site of a third party, such as an aggregator.",
     )
+
+    def to_dcat(self):
+        result = dict()
+        result['dct:title'] = self.title
+        if self.description:
+            result['dct:description'] = self.description
+        return result
 
     def __str__(self):
         return self.title
