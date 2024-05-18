@@ -32,9 +32,17 @@ class Agent(models.Model):
     )
 
     # Optional properties
+    # TODO: mbox is not defined in DCAT
     mbox = models.EmailField(
         blank=True, null=True, help_text="An email address of the Agent."
     )
+
+    def to_dcat(self):
+        result = dict()
+        result['foaf:name'] = self.name
+        if self.type:
+            result['@type'] = self.type
+        return result
 
     def __str__(self):
         return self.name
@@ -68,6 +76,13 @@ class Catalog(models.Model):
     homepage = models.URLField(
         blank=True, help_text="A web page that acts as the main page for the Catalogue."
     )
+
+    def to_dcat(self):
+        result = dict()
+        result['dct:title'] = self.title
+        result['dct:description'] = self.description
+        result['dct:publisher'] = self.publisher.to_dcat()
+        return result
 
     def __str__(self):
         return self.title
