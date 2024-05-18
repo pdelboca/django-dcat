@@ -4,7 +4,7 @@ from dcat.models import Agent, Catalog, Dataset
 # Create your tests here.
 
 
-class DCATExportTestCase(TestCase):
+class DCATSerializationJSONLDTestCase(TestCase):
 
     def setUp(self):
         publisher = Agent.objects.create(
@@ -28,20 +28,20 @@ class DCATExportTestCase(TestCase):
             catalog=catalog,
         )
 
-    def test_agent_to_dcat(self):
+    def test_agent_to_jsonld(self):
         publisher = Agent.objects.first()
-        result = publisher.to_dcat()
+        result = publisher.to_jsonld()
         self.assertEqual(result['@type'], publisher.type)
         self.assertEqual(result['foaf:name'], publisher.name)
 
-    def test_catalog_to_dcat(self):
+    def test_catalog_to_jsonld(self):
         catalog = Catalog.objects.first()
-        result = catalog.to_dcat()
+        result = catalog.to_jsonld()
 
         self.assertEqual(result['@type'], 'dcat:Catalog')
         self.assertEqual(result['dct:title'], catalog.title)
         self.assertEqual(result['dct:description'], catalog.description)
-        self.assertEqual(result['dct:publisher'], catalog.publisher.to_dcat())
+        self.assertEqual(result['dct:publisher'], catalog.publisher.to_jsonld())
         self.assertEqual(result['foaf:homepage'], {'@type': 'foaf:Document', 'foaf:Document': catalog.homepage})
         self.assertEqual(
             result['dcat:dataset'],

@@ -37,7 +37,7 @@ class Agent(models.Model):
         blank=True, null=True, help_text="An email address of the Agent."
     )
 
-    def to_dcat(self):
+    def to_jsonld(self):
         result = dict()
         result['foaf:name'] = self.name
         if self.type:
@@ -77,16 +77,16 @@ class Catalog(models.Model):
         blank=True, help_text="A web page that acts as the main page for the Catalogue."
     )
 
-    def to_dcat(self):
+    def to_jsonld(self):
         result = dict()
         result['@type'] = 'dcat:Catalog'
         result['dct:title'] = self.title
         result['dct:description'] = self.description
-        result['dct:publisher'] = self.publisher.to_dcat()
+        result['dct:publisher'] = self.publisher.to_jsonld()
         if self.homepage:
             result['foaf:homepage'] = {'@type': 'foaf:Document', 'foaf:Document': self.homepage}
 
-        result['dcat:dataset'] = [dataset.to_dcat() for dataset in self.dataset_set.all()]
+        result['dcat:dataset'] = [dataset.to_jsonld() for dataset in self.dataset_set.all()]
 
         return result
 
@@ -146,7 +146,7 @@ class Dataset(models.Model):
         help_text="A web page that provides access to the Dataset, its Distributions and/or additional information. It is intended to point to a landing page at the original data provider, not to a page on a site of a third party, such as an aggregator.",
     )
 
-    def to_dcat(self):
+    def to_jsonld(self):
         result = dict()
         result['dct:title'] = self.title
         if self.description:
