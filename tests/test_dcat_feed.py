@@ -13,7 +13,8 @@ class DCATExportTestCase(TestCase):
         Catalog.objects.create(
             title='FAO Data in Emergencies',
             description='A testing catalog based on true data.',
-            publisher=publisher
+            publisher=publisher,
+            homepage='https://data-in-emergencies.fao.org'
         )
 
     def test_agent_to_dcat(self):
@@ -26,6 +27,8 @@ class DCATExportTestCase(TestCase):
         catalog = Catalog.objects.first()
         result = catalog.to_dcat()
 
+        self.assertEqual(result['@type'], 'dcat:Catalog')
         self.assertEqual(result['dct:title'], catalog.title)
         self.assertEqual(result['dct:description'], catalog.description)
         self.assertEqual(result['dct:publisher'], catalog.publisher.to_dcat())
+        self.assertEqual(result['foaf:homepage'], {'@type': 'foaf:Document', 'foaf:Document': catalog.homepage})

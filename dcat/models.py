@@ -79,9 +79,12 @@ class Catalog(models.Model):
 
     def to_dcat(self):
         result = dict()
+        result['@type'] = 'dcat:Catalog'
         result['dct:title'] = self.title
         result['dct:description'] = self.description
         result['dct:publisher'] = self.publisher.to_dcat()
+        if self.homepage:
+            result['foaf:homepage'] = {'@type': 'foaf:Document', 'foaf:Document': self.homepage}
         return result
 
     def __str__(self):
