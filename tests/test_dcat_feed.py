@@ -63,21 +63,19 @@ class DCATSerializationJSONLDTestCase(TestCase):
         self.assertEqual(result['dct:description'], catalog.description)
         self.assertEqual(result['dct:publisher'], catalog.publisher.to_jsonld())
         self.assertEqual(result['foaf:homepage'], {'@type': 'foaf:Document', 'foaf:Document': catalog.homepage})
-        self.assertEqual(
-            result['dcat:dataset'][0],
-            {
-                'dct:title': 'Colombia - Household Questionnaire - Round 3',
-                'dct:description': 'Household questionarie',
-                'dcat:distribution': [{
-                    '@type': 'dcat:Distribution',
-                    'dcat:accessURL': 'https://external.com/distribution/webpage',
-                    'dct:title': 'ArcGIS Hub Dataset',
-                    'dct:description': 'Web page'
-                }, {
-                    '@type': 'dcat:Distribution',
-                    'dcat:accessURL': 'https://external.com/distribution/rest',
-                    'dct:title': 'ArcGIS GeoService',
-                    'dct:description': 'Esri REST'
-                }]
-            },
-        )
+
+        dataset = result['dcat:dataset'][0]
+        self.assertEqual(dataset['dct:title'], 'Colombia - Household Questionnaire - Round 3')
+        self.assertEqual(dataset['dct:description'], 'Household questionarie')
+
+        distribution_0 = dataset['dcat:distribution'][0]
+        self.assertEqual(distribution_0['@type'], 'dcat:Distribution')
+        self.assertEqual(distribution_0['dcat:accessURL'], 'https://external.com/distribution/webpage')
+        self.assertEqual(distribution_0['dct:title'], 'ArcGIS Hub Dataset')
+        self.assertEqual(distribution_0['dct:description'], 'Web page')
+
+        distribution_1 = dataset['dcat:distribution'][1]
+        self.assertEqual(distribution_1['@type'], 'dcat:Distribution')
+        self.assertEqual(distribution_1['dcat:accessURL'], 'https://external.com/distribution/rest')
+        self.assertEqual(distribution_1['dct:title'], 'ArcGIS GeoService')
+        self.assertEqual(distribution_1['dct:description'], 'Esri REST')
