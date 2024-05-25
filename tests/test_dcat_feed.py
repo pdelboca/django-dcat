@@ -57,6 +57,16 @@ class DCATSerializationJSONLDTestCase(TestCase):
         self.assertEqual(result['@type'], publisher.type)
         self.assertEqual(result['foaf:name'], publisher.name)
 
+    def test_dataset_to_jsonld(self):
+        dataset = Dataset.objects.first()
+        result = dataset.to_jsonld()
+        self.assertEqual(result['dct:title'], 'Colombia - Household Questionnaire - Round 3')
+        self.assertEqual(result['dct:description'], 'Household questionarie')
+
+        d0, d1 = Distribution.objects.all()
+        self.assertEqual(result['dcat:distribution'][0], d0.to_jsonld())
+        self.assertEqual(result['dcat:distribution'][1], d1.to_jsonld())
+
     def test_catalog_to_jsonld(self):
         catalog = Catalog.objects.first()
         result = catalog.to_jsonld()
@@ -67,18 +77,9 @@ class DCATSerializationJSONLDTestCase(TestCase):
         self.assertEqual(result['dct:publisher'], catalog.publisher.to_jsonld())
         self.assertEqual(result['foaf:homepage'], {'@type': 'foaf:Document', 'foaf:Document': catalog.homepage})
 
-        dataset = result['dcat:dataset'][0]
-        self.assertEqual(dataset['dct:title'], 'Colombia - Household Questionnaire - Round 3')
-        self.assertEqual(dataset['dct:description'], 'Household questionarie')
+        dataset = Dataset.objects.first()
+        self.assertEqual(result['dcat:dataset'][0], dataset.to_jsonld())
 
-        distribution_0 = dataset['dcat:distribution'][0]
-        self.assertEqual(distribution_0['@type'], 'dcat:Distribution')
-        self.assertEqual(distribution_0['dcat:accessURL'], 'https://external.com/distribution/webpage')
-        self.assertEqual(distribution_0['dct:title'], 'ArcGIS Hub Dataset')
-        self.assertEqual(distribution_0['dct:description'], 'Web page')
-
-        distribution_1 = dataset['dcat:distribution'][1]
-        self.assertEqual(distribution_1['@type'], 'dcat:Distribution')
-        self.assertEqual(distribution_1['dcat:accessURL'], 'https://external.com/distribution/rest')
-        self.assertEqual(distribution_1['dct:title'], 'ArcGIS GeoService')
-        self.assertEqual(distribution_1['dct:description'], 'Esri REST')
+        d0, d1 = Distribution.objects.all()
+        self.assertEqual(result['dcat:dataset'][0]['dcat:distribution'][0], d0.to_jsonld())
+        self.assertEqual(result['dcat:dataset'][0]['dcat:distribution'][1], d1.to_jsonld())
