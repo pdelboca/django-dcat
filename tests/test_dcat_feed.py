@@ -3,7 +3,10 @@ from dcat.models import Agent, Catalog, Dataset, Distribution
 
 
 class DCATSerializationJSONLDTestCase(TestCase):
+    """ Test that Catalog is properly serialized to JSONLD format.
 
+    This TestCase is inspired by https://data-in-emergencies.fao.org/api/feed/dcat-ap/2.1.1.json.
+    """
     def setUp(self):
         publisher = Agent.objects.create(
             name='Food and Agriculture Organization of the United Nations',
