@@ -39,9 +39,9 @@ class Agent(models.Model):
 
     def to_jsonld(self):
         result = dict()
-        result['foaf:name'] = self.name
+        result["foaf:name"] = self.name
         if self.type:
-            result['@type'] = self.type
+            result["@type"] = self.type
         return result
 
     def __str__(self):
@@ -79,14 +79,14 @@ class Catalog(models.Model):
 
     def to_jsonld(self):
         result = dict()
-        result['@type'] = 'dcat:Catalog'
-        result['dct:title'] = self.title
-        result['dct:description'] = self.description
-        result['dct:publisher'] = self.publisher.to_jsonld()
+        result["@type"] = "dcat:Catalog"
+        result["dct:title"] = self.title
+        result["dct:description"] = self.description
+        result["dct:publisher"] = self.publisher.to_jsonld()
         if self.homepage:
-            result['foaf:homepage'] = {'@type': 'foaf:Document', 'foaf:Document': self.homepage}
+            result["foaf:homepage"] = {"@type": "foaf:Document", "foaf:Document": self.homepage}
 
-        result['dcat:dataset'] = [dataset.to_jsonld() for dataset in self.dataset_set.all()]
+        result["dcat:dataset"] = [dataset.to_jsonld() for dataset in self.dataset_set.all()]
 
         return result
 
