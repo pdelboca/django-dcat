@@ -72,6 +72,16 @@ data quality and avoid common problems like duplicated metadata values for typos
 .csv, .CSV, CSV, etc)
 
 
+DCAT Serialization
+##################
+
+Every object contains methods to serialize it to different formats. This way it is easy to implement a feed URL for your catalog.
+
+ - ``catalog.to_jsonld()``: (WIP) exports the catalog to a JSONLD format. The implementation has been inspired by the `FAO - Data in Emergencies feed <https://data-in-emergencies.fao.org/api/feed/dcat-ap/2.1.1.json>`_.
+ - ``catalog.to_turtle()``: TODO
+ - ``catalog.to_rdf()``: TODO
+
+
 Extending the model
 ###################
 
