@@ -9,6 +9,9 @@ metadata and some command line tools to import data to it, to create vocabularie
 If you wanna see an example of what can be done checkout `Catalogo Social <https://catalogosocial.fly.dev/>`_, a
 data catalog implemented with django-dcat.
 
+django-dcat `was presented at the CSV Conf 2024 <https://www.youtube.com/watch?v=8dUyi4OYAdM>`_ in talk about 
+how to preserve and backup open data portals.
+
 Quick start
 ###########
 
