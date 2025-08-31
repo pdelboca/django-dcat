@@ -31,13 +31,13 @@ wheels = [
 [[package]]
 name = "django-dcat"
 version = "0.0.9"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "django" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "django", specifier = ">=5.2.5" }]
+requires-dist = [{ name = "django", specifier = ">=5.0" }]
 
 [[package]]
 name = "sqlparse"
