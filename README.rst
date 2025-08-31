@@ -130,9 +130,12 @@ For more information on DCAT:
 Publishing a new Version
 ########################
 
-The project uses twine to publish to PyPi:
+The project uses uv to publish to PyPi:
 
- - Update the version in ``setup.cfg``
+ - Bump the version running ``uv version --bump [major|minor|patch]``
+ - Commit the changes and push.
  - Create a new release in Github.
- - Build the package: ``python -m build``
- - Upload to PyPi ``twine upload dist/*``
+ - Build the package: ``uv build``
+ - Upload to PyPi ``uv publish`` (you will need a proper token in your environment.)
+
+For more information check UV documentation: `Building and publishing a package. <https://docs.astral.sh/uv/guides/package/>`_
