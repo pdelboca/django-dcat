@@ -1,0 +1,36 @@
+[project]
+name = "django-dcat"
+version = "0.0.9"
+description = "A Django app that provides a model layer and tools for DCAT applications."
+readme = "README.rst"
+authors = [
+    { name = "Patricio Del Boca", email = "patriciodelboca@proton.me"},
+]
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["django", "dcat", "data catalog", "open data", "webapp"]
+classifiers = [
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 5.0",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+
+requires-python = ">=3.10"
+dependencies = [
+    "django>=5.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/pdelboca/django-dcat/"
